@@ -1,0 +1,8 @@
+ID: mta-python-securestore
+_schema-version: '2.1'
+version: 0.0.1
+
+modules:
+ - name: app
+   type: html5
+   path: app
