@@ -6,3 +6,21 @@ modules:
  - name: app
    type: html5
    path: app
+   requires:
+    - name: python_api
+      group: destinations
+      properties:
+        name: python_be
+        url: ~{url}
+        forwardAuthToken: true
+
+## Python Module Block Begin vvv
+ - name: python
+   type: python
+   path: python
+   provides:
+    - name: python_api
+      properties:
+         url: ${default-url}
+## Python Module Block End ^^^
+
