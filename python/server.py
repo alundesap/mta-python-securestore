@@ -165,15 +165,20 @@ def unauth_ss_retrieve():
     cursor = connection.cursor()
 
 #    # Form an SQL statement to retrieve some data
-    cursor.execute('call SYS.USER_SECURESTORE_RETRIEVE (\'TestStoreName\', False, \'TestKey\', ?)')
+
+#https://blogs.sap.com/2017/07/26/sap-hana-2.0-sps02-new-feature-updated-python-driver/
+
+    #cursor.execute('call SYS.USER_SECURESTORE_RETRIEVE (\'TestStoreName\', False, \'TestKey\', ?)')
+    cursor.callproc("SYS.USER_SECURESTORE_RETRIEVE", ("TestStoreName", False, "TestKey", None))
 
 #    # Execute the SQL and capture the result set
-    results = cursor.fetchall()
+    #results = cursor.fetchall()
 
 #    # Loop through the result set and output
-    for result in results:
+    #for result in results:
+    for result in cursor:
         output += 'result: ' + str(result[1]) + '\n'
-
+        
 #    # Close the DB connection
     connection.close()
 
