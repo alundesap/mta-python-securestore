@@ -110,9 +110,11 @@ def unauth_ss_insert():
 
 #    # Close the DB connection
     connection.close()
-#
+
+    output += 'key TestKey with value ab2467cdef was inserted into store TestStoreName.' + '\n'
+
     # Return the results
-    return output
+    return Response(output, mimetype='text/plain' , status=200,)
 
 @app.route('/python/retrieve')
 def unauth_ss_retrieve():
@@ -164,22 +166,21 @@ def unauth_ss_retrieve():
 
 #    # Form an SQL statement to retrieve some data
     cursor.execute('call SYS.USER_SECURESTORE_RETRIEVE (\'TestStoreName\', False, \'TestKey\', ?)')
-#call SYS.USER_SECURESTORE_INSERT ('TestStoreName', False, 'TestKey', 'ab2467cdef');
-#call SYS.USER_SECURESTORE_RETRIEVE ('TestStoreName', False, 'TestKey', ?);
-#call SYS.USER_SECURESTORE_DELETE ('TestStoreName', False, 'TestKey');
 
 #    # Execute the SQL and capture the result set
     results = cursor.fetchall()
-#
+
 #    # Loop through the result set and output
     for result in results:
         output += 'result: ' + str(result[1]) + '\n'
-#
+
 #    # Close the DB connection
     connection.close()
-#
+
+    output += 'key TestKey was retrieved(as result above) from store TestStoreName.' + '\n'
+
     # Return the results
-    return output
+    return Response(output, mimetype='text/plain' , status=200,)
 
 @app.route('/python/delete')
 def unauth_ss_delete():
@@ -234,9 +235,11 @@ def unauth_ss_delete():
 
 #    # Close the DB connection
     connection.close()
-#
+    
+    output += 'key TestKey was deleted from store TestStoreName.' + '\n'
+    
     # Return the results
-    return output
+    return Response(output, mimetype='text/plain' , status=200,)
 
 
 if __name__ == '__main__':
