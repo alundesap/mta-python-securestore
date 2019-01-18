@@ -36,7 +36,7 @@ hana = env.get_service(label='hana')
 # Requests passed through the app-router will never hit this route.
 @app.route('/')
 def hello_world():
-    output = '<strong>Hello World! I am instance ' + str(os.getenv("CF_INSTANCE_INDEX", 0)) + '</strong> Try these links.</br>\n'
+    output = '<strong>Python SecureStore! Instance ' + str(os.getenv("CF_INSTANCE_INDEX", 0)) + '</strong> Try these links.</br>\n'
     output += '<a href="/python/links">/python/links</a><br />\n'
     return output
     
@@ -48,7 +48,7 @@ def favicon():
 # Coming through the app-router
 @app.route('/python/links')
 def python_links():
-    output = '<strong>Hello World! I am instance ' + str(os.getenv("CF_INSTANCE_INDEX", 0)) + '</strong> Try these links.</br>\n'
+    output = '<strong>Python SecureStore! Instance ' + str(os.getenv("CF_INSTANCE_INDEX", 0)) + '</strong> Try these links.</br>\n'
     output += '<a href="/python/insert">/python/insert</a><br />\n'
     output += '<a href="/python/retrieve">/python/retrieve</a><br />\n'
     output += '<a href="/python/delete">/python/delete</a><br />\n'
@@ -103,15 +103,20 @@ def unauth_ss_insert():
     cursor = connection.cursor()
 
 #    # Form an SQL statement to retrieve some data
-    cursor.execute('call SYS.USER_SECURESTORE_INSERT (\'TestStoreName\', False, \'TestKey\', \'ab2467cdef\')')
-#call SYS.USER_SECURESTORE_INSERT ('TestStoreName', False, 'TestKey', 'ab2467cdef');
-#call SYS.USER_SECURESTORE_RETRIEVE ('TestStoreName', False, 'TestKey', ?);
-#call SYS.USER_SECURESTORE_DELETE ('TestStoreName', False, 'TestKey');
+
+    string2store = 'Whatever!'
+
+    import codecs
+    hex2store = (codecs.encode(str.encode(string2store), "hex")).decode()
+
+    try:
+        cursor.callproc("SYS.USER_SECURESTORE_INSERT", ("TestStoreName", False, "TestKey", hex2store))
+        output += 'key TestKey with value ' + string2store + '=' + hex2store + ' was inserted into store TestStoreName.' + '\n'
+    except:
+        output += 'key TestKey likely already exists. Try deleting first.' + '\n'
 
 #    # Close the DB connection
     connection.close()
-
-    output += 'key TestKey with value ab2467cdef was inserted into store TestStoreName.' + '\n'
 
     # Return the results
     return Response(output, mimetype='text/plain' , status=200,)
@@ -169,20 +174,18 @@ def unauth_ss_retrieve():
 #https://blogs.sap.com/2017/07/26/sap-hana-2.0-sps02-new-feature-updated-python-driver/
 
     #cursor.execute('call SYS.USER_SECURESTORE_RETRIEVE (\'TestStoreName\', False, \'TestKey\', ?)')
-    cursor.callproc("SYS.USER_SECURESTORE_RETRIEVE", ("TestStoreName", False, "TestKey", None))
+    hexvalue = cursor.callproc("SYS.USER_SECURESTORE_RETRIEVE", ("TestStoreName", False, "TestKey", None))
 
-#    # Execute the SQL and capture the result set
-    #results = cursor.fetchall()
-
-#    # Loop through the result set and output
-    #for result in results:
-    for result in cursor:
-        output += 'result: ' + str(result[1]) + '\n'
-        
 #    # Close the DB connection
     connection.close()
 
-    output += 'key TestKey was retrieved(as result above) from store TestStoreName.' + '\n'
+    import codecs
+
+    if hexvalue[3] is None:
+        output += 'key TestKey does not exist in store TestStoreName.  Try inserting a value first.' + '\n'
+    else:
+        retrieved = codecs.decode(hexvalue[3].hex(), "hex").decode()
+        output += 'key TestKey with value ' + retrieved + ' was retrieved from store TestStoreName.' + '\n'
 
     # Return the results
     return Response(output, mimetype='text/plain' , status=200,)
@@ -236,7 +239,7 @@ def unauth_ss_delete():
     cursor = connection.cursor()
 
 #    # Form an SQL statement
-    cursor.execute('call SYS.USER_SECURESTORE_DELETE (\'TestStoreName\', False, \'TestKey\')')
+    cursor.callproc("SYS.USER_SECURESTORE_DELETE", ("TestStoreName", False, "TestKey"))
 
 #    # Close the DB connection
     connection.close()
