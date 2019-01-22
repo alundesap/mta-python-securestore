@@ -5,3 +5,7 @@ wget -c http://thedrop.sap-a-team.com/files/hana_ml-1.0.3.tar.gz ; wget -c http:
 
 cd python ; mkdir -p vendor ; pip download -d vendor -r requirements.txt --find-links ../sap_dependencies --find-links ../hana_ml-1.0.3.tar.gz ; cd ..
 
+mkdir -p target
+mta --build-target CF --mtar target/python-securestore_cf.mtar build
+
+cf deploy target/python-securestore_cf.mtar --use-namespaces
