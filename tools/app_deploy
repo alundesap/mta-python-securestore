@@ -3,12 +3,14 @@ echo ""
 xsorcf=$1
 #Customize the org and space to your own situation
 #org="HANAExpress"
-org="LCFX"
+#org="LCFX"
+org="A-Team_ml"
 #space="delvelopment"
-space="DEV"
+#space="DEV"
+space="ml"
 path=$2
 dest_app=$3
-proj="python-dev-env"
+proj="python-securestore"
 app=$proj"_"$path
 host=$app"-"$path
 dowait=""
@@ -25,7 +27,7 @@ if [ "$#" -eq 3 ]; then
     if [ $xsorcf = "cf" ]; then
       doexport1=" | tail -n +5 | head -n -8"
       doexport2=" | head -n -1"
-      dodest=" | grep ...--urls"
+      dodest=" | grep routes: | tr -s ' ' | cut -d ' ' -f 2 "
       echo "CF cool."
     else
       echo "Not XS or CF, try again."
@@ -40,18 +42,19 @@ if [ "$#" -eq 3 ]; then
   echo $cmd
   eval $cmd
 
-  uaa_instance=$proj"-uaa"
-
-  cmd=$xsorcf' bind-service '$app' '$uaa_instance
-  echo $cmd
-  eval $cmd
-
   destination_app=$proj"_"$dest_app
 
   cmd='DESTAPP=$('$xsorcf' app '$destination_app''$dodest')'
-  #echo $cmd
+  echo $cmd
   eval $cmd
   echo 'DESTAPP='$DESTAPP
+
+  if [ $xsorcf = "cf" ]; then
+     cmd='DESTAPP=$(echo "https://"$DESTAPP)'
+     echo $cmd
+     eval $cmd
+     echo 'DESTAPP='$DESTAPP
+  fi
 
   cmd=$xsorcf' set-env '$app' destinations '"'"'[{"forwardAuthToken":true, "name":"python_be", "url":"'$DESTAPP'"}]'"'"''
   echo $cmd
