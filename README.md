@@ -15,9 +15,13 @@ This example is referred to in the official SAP help documentation at the follow
 
 The Secure Store functions are implmented in a SAP HANA Database instance and the sample application must be deployed to a space where the HANA instance is available.
 
+A functional python implmentation with pip utility for assembling the python dependencies.  See [Python.ORG](https://www.python.org/)
+
+Either the XSA command-line-interface tools or the CF command-line-interface tool with MTA plugin to facilitate the deploy.  This example will use the XSA CLI. See the [Client package available from the HANA Express Downloader](https://www.sap.com/cmp/ft/crm-xu16-dat-hddedft/index.html) or the [CF CLI + MTA Plugin](https://github.com/cloudfoundry-incubator/multiapps-cli-plugin)
+
 This example project also requires python libraries provided by SAP to users with authorized access to download SAP software.
 
-There is an current effort to make these libraries publically available.  See the To-Do section below.
+Note: There is an current effort to make these libraries publically available.  See the To-Do section below.
 
 Once installed or vendored, the following python libraries are provided to the python module of the application.
 
