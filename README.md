@@ -15,9 +15,23 @@ This example is referred to in the official SAP help documentation at the follow
 
 The Secure Store functions are implmented in a SAP HANA Database instance and the sample application must be deployed to a space where the HANA instance is available.
 
+The target deploy environment must have Python runtime 3.6.5 installed(or adjust python/runtime.txt).  Verify with the following.
+```
+xs runtimes
+```
+If the required Python runtime is not available, request it be installed by your HANA system administrator.
+
+[The SAP HANA XS Advanced Python Run Time](https://help.sap.com/viewer/DRAFT/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/8d786ec8ab964145a7453c1f53f452db.html)
+
 A functional python implmentation with pip utility for assembling the python dependencies.  See [Python.ORG](https://www.python.org/)
 
 Either the XSA command-line-interface tools or the CF command-line-interface tool with MTA plugin to facilitate the deploy.  This example will use the XSA CLI. See the [Client package available from the HANA Express Downloader](https://www.sap.com/cmp/ft/crm-xu16-dat-hddedft/index.html) or the [CF CLI + MTA Plugin](https://github.com/cloudfoundry-incubator/multiapps-cli-plugin)
+
+A functional java runtime(for the MTA builder tool).  See [Java.COM](https://www.java.com/en/download/)
+
+The MTA builder tool jar file.  See [Multitarget Application Archive Builder](https://help.sap.com/viewer/58746c584026430a890170ac4d87d03b/Cloud/en-US/ba7dd5a47b7a4858a652d15f9673c28d.html) 
+
+A functional NodeJS implementation with NPM utility for assembling the nodejs dependencies. See [NodeJS.ORG](https://nodejs.org/en/)
 
 This example project also requires python libraries provided by SAP to users with authorized access to download SAP software.
 
@@ -56,6 +70,11 @@ Change into the project folder.
 cd mta-python-securestore
 ```
 
+If pip doesn't support the download sub-command you may need to update it.
+```
+pip install --upgrade pip
+```
+
 Pull all the python dependencies into a "vendor" folder that will be bundled into the project.
 ```
 cd python
@@ -64,12 +83,19 @@ pip download -d vendor -r requirements.txt --find-links ../../sap_dependencies
 cd ..
 ```
 
-Deploy the application to a space where an SAP HANA instance is available.
+Pull all the NodeJS dependencies into a "node_modules" folder that will be bundled into the project.
+```
+tools/set_nodejs_env
+cd app
+npm install
+cd ..
+```
+
+Build the MTAR and deploy the application to a space where an SAP HANA instance is available.
 ```
 mkdir -p target
-mta --build-target CF --mtar target/python-securestore_cf.mtar build
-
-cf deploy target/python-securestore_cf.mtar --use-namespaces
+java -jar ../mta_archive_builder-1.1.7.jar --build-target XSA --mtar target/python-securestore_xsa.mtar build
+xs deploy target/python-securestore_xsa.mtar --use-namespaces
 ```
 
 Discover the deployed application's URL and open it in a browser.
