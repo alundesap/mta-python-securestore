@@ -26,15 +26,47 @@ hdbcli
 
 ## Download and Installation
 
-wget -c http://thedrop.sap-a-team.com/files/hana_ml-1.0.3.tar.gz ; wget -c http://thedrop.sap-a-team.com/files/XS_PYTHON00_1-70003433.ZIP ; mkdir -p sap_dependencies ; unzip XS_PYTHON00_1-70003433.ZIP -d sap_dependencies
+Follow the help instructions at the following link in order to download the XS_PYTHON.ZIP file.
 
+[Download and Consume Python Libraries](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/842824f04d654ceeaf5168da663a65ce.html)
 
-cd python ; mkdir -p vendor ; pip download -d vendor -r requirements.txt --find-links ../sap_dependencies --find-links ../hana_ml-1.0.3.tar.gz ; cd ..
+Create a folder (using sap_dependencies here to mimik the help documentation) and unzip the file contents into it.
+The file name was XS_PYTHON00_1-70003433.ZIP as of the date this repo was last updated.  You may need to adjust the filename.
 
+```
+mkdir -p sap_dependencies
+unzip XS_PYTHON00_1-70003433.ZIP -d sap_dependencies
+```
+
+Clone this repo at the same directory level as the sap_dependencies folder.
+```
+git clone https://github.com/alundesap/mta-python-securestore.git
+```
+
+Change into the project folder.
+```
+cd mta-python-securestore
+```
+
+Pull all the python dependencies into a "vendor" folder that will be bundled into the project.
+```
+cd python
+mkdir -p vendor
+pip download -d vendor -r requirements.txt --find-links ../../sap_dependencies
+cd ..
+```
+
+Deploy the application to a space where an SAP HANA instance is available.
+```
 mkdir -p target
 mta --build-target CF --mtar target/python-securestore_cf.mtar build
 
 cf deploy target/python-securestore_cf.mtar --use-namespaces
+```
+
+Discover the deployed application's URL and open it in a browser.
+```
+```
 
 ## Configuration
 
@@ -52,7 +84,7 @@ This example contains no known issues and is provided "as-is".
 
 This project is provided "as-is" with no expectation for major changes or support.
 
-You may attemp
+You may attempt to contact the original author [Andrew Lunde](mailto:andrew.lunde@sap.com) if you find errors in this document.
 
 ## Contributing
 
