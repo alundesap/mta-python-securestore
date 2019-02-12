@@ -19,16 +19,18 @@ There is an current effort to make these libraries publically available.  See th
 
 Once installed or vendored, the following python libraries are provided to the python module of the application.
 
-cfenv
-sap_py_jwt
-sap_xssec
-hdbcli
+- cfenv
+- sap_py_jwt
+- sap_xssec
+- hdbcli
 
 ## Download and Installation
 
 Follow the help instructions at the following link in order to download the XS_PYTHON.ZIP file.
 
 [Download and Consume Python Libraries](https://help.sap.com/viewer/4505d0bdaf4948449b7f7379d24d0f0d/2.0.03/en-US/842824f04d654ceeaf5168da663a65ce.html)
+
+Note: The following should be performed on a Linux system.  The python pip utility has a tendency to pick up versions of the libraries of the current system's architecture and this will cause the deployed application to crash.
 
 Create a folder (using sap_dependencies here to mimik the help documentation) and unzip the file contents into it.
 The file name was XS_PYTHON00_1-70003433.ZIP as of the date this repo was last updated.  You may need to adjust the filename.
