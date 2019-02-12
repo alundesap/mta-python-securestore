@@ -100,6 +100,7 @@ xs deploy target/python-securestore_xsa.mtar --use-namespaces
 
 Discover the deployed application's URL and open it in a browser.
 ```
+xs app mta-python-securestore.app --urls
 ```
 
 ## Configuration
