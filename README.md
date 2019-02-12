@@ -3,7 +3,7 @@ Multi-Target Application Python Example of interfacing with the Secure Store API
 
 ## Description
 
-This repo contains a complete example of interfacing with the SAP HANA Secure Store API.  It take the form of multi-target application(MTA) with the interfacing module written in the python programming language.
+This repo contains a complete example of interfacing with the SAP HANA Secure Store API.  It take the form of multi-target application(MTA) with the interfacing module written in the python programming language.  If you are just interested in the python specifics of calling the API, you can find all the details in the [python/server.py](python.server.py) file.
 
 This example is referred to in the official SAP help documentation at the following link.
 
